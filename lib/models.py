@@ -30,16 +30,21 @@ class Restaurant(Base):
     reviews = relationship("Review", back_populates="restaurant")
     customers = relationship("Customer", secondary=customer_restaurant, back_populates="restaurants")
 
-    def reviews():
-        "returns a collection of all the reviews for the `Restaurant`"
-        pass
+    def reviews(self):
+        return self.reviews
 
-    def customers():
-        "returns a collection of all the customers who reviewed the `Restaurant`"
-        pass
+    def customers(self):
+        return self.customers
 
     def __repr__(self):
         return f'Restaurant: {self.name}'
+    
+    @classmethod
+    def fanciest(cls):
+        pass
+
+    def all_reviews(self):
+        return self.reviews.fullreview()
 
 class Customer(Base):
     __tablename__ = 'customers'
@@ -51,15 +56,26 @@ class Customer(Base):
     reviews = relationship("Review", back_populates="customer")
     restaurants = relationship("Customer", secondary=customer_restaurant, back_populates="customers")
 
-    def reviews():
-        "should return a collection of all the reviews that the `Customer` has left"
-        pass
+    def reviews(self):
+        return self.reviews
 
-    def restaurants():
-        "should return a collection of all the restaurants that the `Customer` has reviewed"
+    def restaurants(self):
+        return self.restaurants
 
     def __repr__(self):
         return f'Customer: {self.first_name} + {self.last_name}'
+    
+    def full_name(self):
+        pass
+
+    def ravorite_restaurant(self):
+        pass
+
+    def add_review(self):
+        pass
+
+    def delete_review(self):
+        pass
 
 class Reviews(Base):
     __tablename__ = 'reviews'
@@ -73,13 +89,14 @@ class Reviews(Base):
     customer = relationship("Customer", back_populates="customer")
     restaurant = relationship("Restaurant", back_populates="customer")
 
-    def customer():
-        "should return the `Customer` instance for this review"
-        pass
+    def customer(self):
+        return self.customer
 
-    def restaurant():
-        "should return the `Restaurant` instance for this review"
-        pass
+    def restaurant(self):
+        return self.restaurant
 
     def __repr__(self):
         return f'Customer: {self.the_review} , {self.star_rating}'
+    
+    def full_review(self):
+        return f'{self.restaurant.name} by {self.customer.fullname()}: {self.star_rating} stars.'

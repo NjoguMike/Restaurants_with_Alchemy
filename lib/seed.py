@@ -11,6 +11,7 @@ session = Session()
 
 fake = Faker()
 
+session.query(Restaurant).delete()
 taverns = []
 for i in range(10):
     restaurant = Restaurant(
@@ -21,6 +22,7 @@ for i in range(10):
     session.commit()
     taverns.append(restaurant)
 
+session.query(Customer).delete()
 customers =[]
 for i in range(15):
     customer = Customer(
@@ -31,6 +33,7 @@ for i in range(15):
     session.commit()
     customers.append(customer)
 
+session.query(Reviews).delete()
 for customer in customers:
     review = Reviews(
         the_review = fake.sentence(),
@@ -38,6 +41,6 @@ for customer in customers:
         customer_id = customer.id,
         restaurant_id = random.choice(taverns).id
     )
-    session.add(Reviews)
+    session.add(review)
     session.commit()
     # print(review)
