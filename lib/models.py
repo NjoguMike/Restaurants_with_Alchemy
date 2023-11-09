@@ -12,11 +12,11 @@ Base = declarative_base()
 engine = create_engine('sqlite:///db/restaurants.db', echo=True)
 
 
-customer_review = Table(
-    'customer_reviews',
+customer_restaurant = Table(
+    'customer_restaurant',
     Base.metadata,
     Column('customer_id', ForeignKey('customers.id'), primary_key=True),
-    Column('review_id', ForeignKey('reviews.id'), primary_key=True),
+    Column('restaurant_id', ForeignKey('restaurants.id'), primary_key=True),
     extend_existing=True
 )
 
@@ -28,7 +28,7 @@ class Restaurant(Base):
     price = Column(Integer)
 
     reviews = relationship("Review", back_populates="restaurant")
-    customers = relationship("Customer", secondary=customer_review, back_populates="restaurants")
+    customers = relationship("Customer", secondary=customer_restaurant, back_populates="restaurants")
 
     def reviews():
         "returns a collection of all the reviews for the `Restaurant`"
@@ -49,7 +49,7 @@ class Customer(Base):
     last_name = Column(String())
 
     reviews = relationship("Review", back_populates="customer")
-    restaurants = relationship("Customer", secondary=customer_review, back_populates="customers")
+    restaurants = relationship("Customer", secondary=customer_restaurant, back_populates="customers")
 
     def reviews():
         "should return a collection of all the reviews that the `Customer` has left"
@@ -59,7 +59,7 @@ class Customer(Base):
         "should return a collection of all the restaurants that the `Customer` has reviewed"
 
     def __repr__(self):
-        return f'Customer: {self.name}'
+        return f'Customer: {self.first_name} + {self.last_name}'
 
 class Reviews(Base):
     __tablename__ = 'reviews'
@@ -82,4 +82,4 @@ class Reviews(Base):
         pass
 
     def __repr__(self):
-        return f'Customer: {self.name}'
+        return f'Customer: {self.the_review} , {self.star_rating}'
